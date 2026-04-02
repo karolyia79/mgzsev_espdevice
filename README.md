@@ -48,7 +48,7 @@ Az autó OBD2 portja adja a tápot, amit le kell transzformálni az ESP32 szám�
 
 ### B - Ha standalone akarod használni (nincs home assitant)
 1. Kösd össze az ESP32-t számítógéppel
-2. [![Telepítés indítása](https://img.shields.io/badge/FLASHER-START_INSTALLATION-e11d48?style=for-the-badge&logo=esphome&logoColor=white)](https://karolyia79.github.io/mgzsev_espdevice/)
+2. **[Kattints ide az MG ZS EV Reader telepítéséhez](https://karolyia79.github.io/mgzsev_espdevice/)**
 3. Csatlakozhatsz az esközhöz WiFi-n (megjenik egy AP, amit be kell konfigurálni) vagy Bluetooth-on is.
 4. WiFi-n a konfigurálás után kapott IP-re csatlakozva minden adatot látni fogsz.
 5. Bluetooth-ra csatlakozva kell valamilyen Bluetooth-terminál applikáció, amivel látható lak lesznek az adatok. Pl: Android: Serial Bluetooth Terminal (Fejlesztő: Kai Morich). Apple: Bluetooth Terminal (Lukas Pistrol)
