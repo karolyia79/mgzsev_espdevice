@@ -1,0 +1,269 @@
+esphome:
+  name: evmgzs
+  friendly_name: evmgzs
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+esp32_ble:
+  name: "MG_ZS_EV_DATA"
+
+esp32_ble_server:
+  id: my_ble_server
+  manufacturer: "MG ZS EV Reader"
+  # Ha fix azonosítót akarsz megadni, így kell:
+  manufacturer_data: [0xE5, 0x02] 
+
+bluetooth_proxy:
+  active: true
+
+logger:
+  level: DEBUG
+
+# API, OTA és wifi beállításaid itt legyenek!!!
+
+captive_portal:
+
+web_server:
+  port: 80
+
+canbus:
+  - platform: esp32_can
+    id: can_bus_mg
+    can_id: 1
+    tx_pin: GPIO5
+    rx_pin: GPIO4
+    bit_rate: 500kbps
+    on_frame:
+      # --- BMS VÁLASZOK (0x789) ---
+      - can_id: 0x789
+        then:
+          - lambda: |-
+              if (x[1]==0x62 && x[2]==0xB0) {
+                if (x[3]==0x42) id(mg_batt_voltage).publish_state(encode_uint16(x[4], x[5]) * 0.25);
+                if (x[3]==0x46) id(mg_soc_raw).publish_state(encode_uint16(x[4], x[5]) / 10.0);
+                if (x[3]==0x61) id(mg_soh).publish_state(encode_uint16(x[4], x[5]) / 100.0);
+                if (x[3]==0x56) id(mg_hv_batt_temp).publish_state(x[4] - 40.0);
+                if (x[3]==0x5C) id(mg_batt_coolant_temp).publish_state(x[4] - 40.0);
+                if (x[3]==0xCE) id(mg_range).publish_state(encode_uint16(x[4], x[5]) / 10.0);
+                
+                if (x[3]==0x48) {
+                  id(mg_bms_charging).publish_state(x[4] == 6 || x[4] == 7 || x[4] == 12);
+                  switch (x[4]) {
+                    case 0: id(mg_bms_status).publish_state("Unlocked"); break;
+                    case 1: id(mg_bms_status).publish_state("Idle"); break;
+                    case 3: id(mg_bms_status).publish_state("Running"); break;
+                    case 6: id(mg_bms_status).publish_state("AC Charging"); break;
+                    case 7: id(mg_bms_status).publish_state("DC Charging"); break;
+                    case 10: id(mg_bms_status).publish_state("Connected"); break;
+                    default: id(mg_bms_status).publish_state("Other"); break;
+                  }
+                }
+                if (x[3]==0x1E) id(mg_ac_charge_count).publish_state(encode_uint16(x[4], x[5]));
+                if (x[3]==0x1F) id(mg_dc_charge_count).publish_state(encode_uint16(x[4], x[5]));
+              }
+
+      # --- VCU VÁLASZOK (0x7EB) ---
+      - can_id: 0x7EB
+        then:
+          - lambda: |-
+              if (x[1]==0x62) {
+                if (x[2]==0x01 && x[3]==0x12) id(mg_12v_batt_v).publish_state(x[4] / 10.0);
+                if (x[2]==0xB7 && x[3]==0x1B) id(mg_charger_connected).publish_state(x[4] > 0);
+                if (x[2]==0xB7 && x[3]==0x01) id(mg_charge_time_remaining).publish_state(encode_uint16(x[4], x[5]));
+              }
+
+      # --- IPK / ODOMETER VÁLASZ (0x768) ---
+      - can_id: 0x768
+        then:
+          - lambda: |-
+              if (x[1]==0x62 && x[2]==0xB1 && x[3]==0x01) {
+                id(mg_odometer).publish_state(x[4] * 65536 + x[5] * 256 + x[6]);
+              }
+
+      # --- OBC / TÖLTÉS VÁLASZOK (0x7EC) ---
+      - can_id: 0x7EC
+        then:
+          - lambda: |-
+              if (x[1]==0x62 && x[2]==0xB0) {
+                static float obc_v = 0, obc_c = 0;
+                if (x[3]==0x10) obc_v = encode_uint16(x[4], x[5]) / 100.0;
+                if (x[3]==0x01) obc_c = encode_uint16(x[4], x[5]) / 10.0;
+                if (obc_v > 0) id(mg_charge_power).publish_state((obc_v * obc_c) / 1000.0);
+              }
+
+      # --- DCDC VÁLASZOK (0x78D) ---
+      - can_id: 0x78D
+        then:
+          - lambda: |-
+              if (x[1]==0x62 && x[2]==0xB0) {
+                if (x[3]==0x26) id(mg_dcdc_temp).publish_state(x[4] - 40.0);
+                if (x[3]==0x22) id(mg_12v_batt_c).publish_state((encode_uint16(x[4], x[5]) * 0.05) - 250.0);
+              }
+
+      # --- KLÍMA / AMBIENT (0x758) ---
+      - can_id: 0x758
+        then:
+          - lambda: |-
+              if (x[1]==0x62 && x[2]==0xE0 && x[3]==0x1B) id(mg_ambient_temp).publish_state(x[4] - 40.0);
+
+      # --- TPMS (0x72C) ---
+      - can_id: 0x72C
+        then:
+          - lambda: |-
+              if (x[1]==0x62 && x[2]==0xB0 && x[3]==0x01) {
+                id(mg_tpms_fl).publish_state(x[4] * 4);
+                id(mg_tpms_fr).publish_state(x[5] * 4);
+                id(mg_tpms_rr).publish_state(x[6] * 4);
+                id(mg_tpms_rl).publish_state(x[7] * 4);
+              }
+
+      # --- BCM / ZÁR (0x749) ---
+      - can_id: 0x749
+        then:
+          - lambda: |-
+              if (x[1]==0x62 && x[2]==0xB5 && x[3]==0x01) {
+                id(mg_car_locked).publish_state(x[5] & 0x08);
+              }
+
+sensor:
+  - platform: template
+    id: mg_odometer
+    name: "Odometer"
+    unit_of_measurement: "km"
+    accuracy_decimals: 0
+    state_class: total_increasing
+    icon: "mdi:speedometer"
+  - platform: template
+    id: mg_12v_batt_v
+    name: "12V Battery Voltage"
+    unit_of_measurement: "V"
+    accuracy_decimals: 1
+  - platform: template
+    id: mg_12v_batt_c
+    name: "12V Battery Current"
+    unit_of_measurement: "A"
+    accuracy_decimals: 1
+  - platform: template
+    id: mg_dcdc_temp
+    name: "DCDC Temperature"
+    unit_of_measurement: "°C"
+  - platform: template
+    id: mg_hv_batt_temp
+    name: "HV Battery Temp"
+    unit_of_measurement: "°C"
+  - platform: template
+    id: mg_batt_coolant_temp
+    name: "Battery Coolant Temp"
+    unit_of_measurement: "°C"
+  - platform: template
+    id: mg_ambient_temp
+    name: "Ambient Temperature"
+    unit_of_measurement: "°C"
+  - platform: template
+    id: mg_batt_voltage
+    name: "HV Battery Voltage"
+    unit_of_measurement: "V"
+  - platform: template
+    id: mg_soc_raw
+    name: "HV SOC Raw"
+    unit_of_measurement: "%"
+  - platform: template
+    id: mg_soh
+    name: "HV SOH"
+    unit_of_measurement: "%"
+    accuracy_decimals: 1
+  - platform: template
+    id: mg_range
+    name: "MG Range"
+    unit_of_measurement: "km"
+    accuracy_decimals: 1
+  - platform: template
+    id: mg_charge_power
+    name: "MG Charging Power"
+    unit_of_measurement: "kW"
+    accuracy_decimals: 2
+  - platform: template
+    id: mg_charge_time_remaining
+    name: "Hátralévő töltési idő"
+    unit_of_measurement: "min"
+  - platform: template
+    id: mg_ac_charge_count
+    name: "MG AC Charge Count"
+    icon: "mdi:ev-station"
+  - platform: template
+    id: mg_dc_charge_count
+    name: "MG DC Charge Count"
+    icon: "mdi:flash"
+  - platform: template
+    id: mg_tpms_fl
+    name: "Gumi Bal első"
+    unit_of_measurement: "kPa"
+  - platform: template
+    id: mg_tpms_fr
+    name: "Gumi Jobb első"
+    unit_of_measurement: "kPa"
+  - platform: template
+    id: mg_tpms_rr
+    name: "Gumi Jobb hátsó"
+    unit_of_measurement: "kPa"
+  - platform: template
+    id: mg_tpms_rl
+    name: "Gumi Bal hátsó"
+    unit_of_measurement: "kPa"
+
+text_sensor:
+  - platform: template
+    id: mg_bms_status
+    name: "BMS állapot"
+
+binary_sensor:
+  - platform: template
+    id: mg_bms_charging
+    name: "BMS töltés állapot"
+    device_class: battery_charging
+  - platform: template
+    id: mg_charger_connected
+    name: "Töltő csatlakoztatva"
+    device_class: plug
+  - platform: template
+    id: mg_car_locked
+    name: "Központi zár"
+    device_class: lock
+
+interval:
+  - interval: 5s
+    then:
+      - lambda: |-
+          if (id(mg_charger_connected).state || id(mg_bms_charging).state) {
+            id(can_bus_mg).send_data(0x7E3, false, {0x02, 0x3E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00});
+            id(can_bus_mg).send_data(0x781, false, {0x02, 0x3E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00});
+          }
+      - logger.log:
+          format: "BT SOC: %.1f, Temp: %.1f"
+          args: [ 'id(mg_soc_raw).state', 'id(mg_hv_batt_temp).state' ]
+
+  - interval: 10s
+    then:
+      - canbus.send: { can_id: 0x781, data: [0x03, 0x22, 0xB0, 0x42, 0, 0, 0, 0] }
+      - canbus.send: { can_id: 0x781, data: [0x03, 0x22, 0xB0, 0x46, 0, 0, 0, 0] }
+      - canbus.send: { can_id: 0x781, data: [0x03, 0x22, 0xB0, 0x56, 0, 0, 0, 0] }
+      - canbus.send: { can_id: 0x781, data: [0x03, 0x22, 0xB0, 0x5C, 0, 0, 0, 0] }
+      - canbus.send: { can_id: 0x781, data: [0x03, 0x22, 0xB0, 0x61, 0, 0, 0, 0] }
+      - canbus.send: { can_id: 0x781, data: [0x03, 0x22, 0xB0, 0xCE, 0, 0, 0, 0] }
+      - canbus.send: { can_id: 0x781, data: [0x03, 0x22, 0xB0, 0x48, 0, 0, 0, 0] }
+      - canbus.send: { can_id: 0x781, data: [0x03, 0x22, 0xB0, 0x1E, 0, 0, 0, 0] }
+      - canbus.send: { can_id: 0x781, data: [0x03, 0x22, 0xB0, 0x1F, 0, 0, 0, 0] }
+      - canbus.send: { can_id: 0x785, data: [0x03, 0x22, 0xB0, 0x22, 0, 0, 0, 0] }
+      - canbus.send: { can_id: 0x785, data: [0x03, 0x22, 0xB0, 0x26, 0, 0, 0, 0] }
+      - canbus.send: { can_id: 0x7E3, data: [0x03, 0x22, 0x01, 0x12, 0, 0, 0, 0] }
+      - canbus.send: { can_id: 0x7E3, data: [0x03, 0x22, 0xB7, 0x1B, 0, 0, 0, 0] }
+      - canbus.send: { can_id: 0x7E3, data: [0x03, 0x22, 0xB7, 0x01, 0, 0, 0, 0] }
+      - canbus.send: { can_id: 0x784, data: [0x03, 0x22, 0xB0, 0x10, 0, 0, 0, 0] }
+      - canbus.send: { can_id: 0x784, data: [0x03, 0x22, 0xB0, 0x01, 0, 0, 0, 0] }
+      - canbus.send: { can_id: 0x750, data: [0x03, 0x22, 0xE0, 0x1B, 0, 0, 0, 0] }
+      - canbus.send: { can_id: 0x724, data: [0x03, 0x22, 0xB0, 0x01, 0, 0, 0, 0] }
+      - canbus.send: { can_id: 0x741, data: [0x03, 0x22, 0xB5, 0x01, 0, 0, 0, 0] }
+      - canbus.send: { can_id: 0x760, data: [0x03, 0x22, 0xB1, 0x01, 0, 0, 0, 0] }
