@@ -53,8 +53,9 @@ Az autó OBD2 portja adja a tápot, amit le kell transzformálni az ESP32 szám�
 3. Csatlakozhatsz az esközhöz WiFi-n (megjenik egy AP, amit be kell konfigurálni) vagy Bluetooth-on is.
 4. WiFi-n a konfigurálás után kapott IP-re csatlakozva minden adatot látni fogsz.
 5. Bluetooth-ra csatlakozva kell valamilyen Bluetooth-terminál applikáció, amivel látható lak lesznek az adatok. Pl: Android: Serial Bluetooth Terminal (Fejlesztő: Kai Morich). Apple: Bluetooth Terminal (Lukas Pistrol)
+### A "B" MÓDSZER NINCS TESZTELVE! HA BÁRMI PROBLÉMÁD ADÓDNA, NYISS EGY [ISSUES-T]([https://github.com/karolyia79/mgzsev_espdevice/raw/main/yaml/mgzsev_espdevice.yaml](https://github.com/karolyia79/mgzsev_espdevice/issues)) ÉS ÍRD LE, CSAK ÍGY TUDOK SEGÍTENI!!
 
-### Ha a kapcsolat létrejött és nincs azonnal adat ne ess kétségbe! Kell neki néhány másodperc, mire az autó észreveszi, hogy miket kér tőle CAN buszon az eszköz!
+## Ha a kapcsolat létrejött és nincs azonnal adat ne ess kétségbe! Kell neki néhány másodperc, mire az autó észreveszi, hogy miket kér tőle CAN buszon az eszköz!
 
 ## ⚠️ Biztonsági figyelmeztetés
 Az OBD2 port a kormányoszlop alatt, bal oldalon található. Ügyelj rá, hogy a kábelezés ne akadályozza a pedálok használatát vagy a kormányzást! A DC-DC konvertert az első használat előtt mérd ki multiméterrel, hogy pontosan 5V-ot adjon le! A kábelek és csatlakozópontok szigetelésére, illetve a bekötések pólusaira nagyon figyelj, mert akár kárt is okozhat az autó CAN rendszerében! A kábelezés legyen jó minőségű és megfelelő keresztmetszetű vezetékekből! A forrasztások legyenek erősek! Az eszköz használata EGYÉNI FELELŐSSÉG, bármilyen kárért a felhasználó felelős! <br>
