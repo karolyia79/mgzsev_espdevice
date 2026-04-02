@@ -13,12 +13,12 @@ Ez a projekt egy nyílt forráskódú megoldás az **MG ZS EV (2019-2021)** elek
 A projekt az alábbi (vagy ezekkel kompatibilis) alkatrészekre lett optimalizálva:
 
 1. **Mikrokontroller:** [ESP32 DevKit V1](https://www.aliexpress.com/item/1005007806091039.html)<br>
-    A testboard kényelmes a csavarozás miatt, de jelentősen megnöveli a méretet, azzal már nem fér a dobozos odb2 csatlakozó dobozásba!     
+    A testboard kényelmes a csavarozás miatt, de jelentősen megnöveli a méretet, azzal már nem fér a dobozos odb2 csatlakozó dobozába!     
 2. **CAN busz illesztő:** [SN65HVD230 CAN Board](https://www.aliexpress.com/item/1005009014401256.html) (3.3V kompatibilis!)<br>
-    Ajánlott az érintkező tüdskéket leforrasztani és fixre forrasztani a kábelezést!
+    Ajánlott az érintkező tüskéket leforrasztani és fixre forrasztani a kábelezést!
 3. **Tápellátás:** [DC-DC Step-Down konverter](https://www.aliexpress.com/item/1005010535958276.html) (12V -> 5V)
 4. **Csatlakozó:** [OBD2 Male csatlakozófej](https://www.aliexpress.com/item/1005003700654250.html)<br>
-    Csatlakozóből azt válaszd, amelyiket szeretnéd. A dobozos verzióba egyébként belefér az összes alkatrész. Összeépítésnél figyel az érintkezők szigetelésére (clapton szalaggal szigetelj!). A lábkiosztás számozva van az összes terméken.
+    Csatlakozóből azt válaszd, amelyiket szeretnéd. A dobozos verzióba belefér az összes alkatrész. Összeépítésnél figyel az érintkezők szigetelésére (clapton szalaggal szigetelj!). A lábkiosztás számozva van az összes terméken.
 
 ## 🔌 Bekötési segédlet (Wiring)
 
