@@ -42,7 +42,7 @@ Az autó OBD2 portja adja a tápot, amit le kell transzformálni az ESP32 szám�
 ### A - Ha van home assitant szervered:
 1. Hozz létre egy új eszközt, alapbeállításokkal az ESPHome Builder-el (Ha nincs, akkor kell HACS kiegészítőt telepítened!)
 2. A szükséges részeket az `ha_mg_zs_ev.yaml` fájlból másold be. <br>
-    [Firmware letöltése](https://github.com/karolyia79/mgzsev_espdevice/raw/main/yaml/m)
+    [Firmware letöltése](https://github.com/karolyia79/mgzsev_espdevice/raw/main/yaml/mgzsev_espdevice.yaml)
 4. Kösd össze az ESP32-t a géppel
 5. Flash-eld az ESP32-re az [ESPHome Web Tools](https://web.esphome.io/) vagy a Home Assistant ESPHome kiegészítője segítségével.
 6. Az ESPHome Builder kezelőfelületén online lesz és használd az új entitásokat.
