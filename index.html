@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>MG ZS EV Firmware Installer</title>
+  <script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
+  <style>
+    body { font-family: sans-serif; text-align: center; padding: 50px; background: #f4f4f4; }
+    .card { background: white; padding: 30px; border-radius: 15px; display: inline-block; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    h1 { color: #e11d48; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>MG ZS EV Reader</h1>
+    <p>Csatlakoztasd az ESP32-t USB-n, majd kattints a telepítésre!</p>
+    
+    <!-- Ez a gomb végzi a varázslatot -->
+    <esp-web-install-button manifest="./manifest.json"></esp-web-install-button>
+    
+    <p><small>Csak Chrome vagy Edge böngészővel működik.</small></p>
+  </div>
+</body>
+</html>
