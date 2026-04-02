@@ -16,7 +16,8 @@ A projekt az alábbi (vagy ezekkel kompatibilis) alkatrészekre lett optimalizá
     A testboard kényelmes a csavarozás miatt, de jelentősen megnöveli a méretet, azzal már nem fér a dobozos odb2 csatlakozó dobozába!     
 2. **CAN busz illesztő:** [SN65HVD230 CAN Board](https://www.aliexpress.com/item/1005009014401256.html) (3.3V kompatibilis!)<br>
     Ajánlott az érintkező tüskéket leforrasztani és fixre forrasztani a kábelezést!
-3. **Tápellátás:** [DC-DC Step-Down konverter](https://www.aliexpress.com/item/1005010535958276.html) (12V -> 5V)
+3. **Tápellátás:** [DC-DC Step-Down konverter](https://www.aliexpress.com/item/1005010535958276.html) (12V -> 5V) <br>
+   FONTOS! Ha ezt a típust veszed, akkor a kis potméterrel szükséges beállítani a feszültséget 5V-ra egy mutiméter segítségével! Ha nem vagy biztos a dolgodban, akkor keress egy fixen 5V-os modelt! 
 4. **Csatlakozó:** [OBD2 Male csatlakozófej](https://www.aliexpress.com/item/1005003700654250.html)<br>
     Csatlakozóből azt válaszd, amelyiket szeretnéd. A dobozos verzióba belefér az összes alkatrész. Összeépítésnél figyel az érintkezők szigetelésére (clapton szalaggal szigetelj!). A lábkiosztás számozva van az összes terméken.
 
@@ -41,8 +42,8 @@ Az autó OBD2 portja adja a tápot, amit le kell transzformálni az ESP32 szám�
 
 ### A - Ha van home assitant szervered:
 1. Hozz létre egy új eszközt, alapbeállításokkal az ESPHome Builder-el (Ha nincs, akkor kell HACS kiegészítőt telepítened!)
-2. A szükséges részeket az `ha_mg_zs_ev.yaml` fájlból másold be. <br>
-    [Firmware letöltése](https://github.com/karolyia79/mgzsev_espdevice/raw/main/yaml/mgzsev_espdevice.yaml)
+2. A szükséges részeket a lentebb lévő yaml fájlból másold be az előbb létrehozott eszközöd yaml fájljába . <br>
+    [A yaml fájl](https://github.com/karolyia79/mgzsev_espdevice/raw/main/yaml/mgzsev_espdevice.yaml)
 4. Kösd össze az ESP32-t a géppel
 5. Flash-eld az ESP32-re az [ESPHome Web Tools](https://web.esphome.io/) vagy a Home Assistant ESPHome kiegészítője segítségével.
 6. Az ESPHome Builder kezelőfelületén online lesz és használd az új entitásokat.
