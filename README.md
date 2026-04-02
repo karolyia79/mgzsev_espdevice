@@ -22,7 +22,7 @@ A projekt az alábbi (vagy ezekkel kompatibilis) alkatrészekre lett optimalizá
     Csatlakozóből azt válaszd, amelyiket szeretnéd. A dobozos verzióba belefér az összes alkatrész. Összeépítésnél figyel az érintkezők szigetelésére (clapton szalaggal szigetelj!). A lábkiosztás számozva van az összes terméken.
 
 ## Előkészület
-Nagy valószínűséggel nem lesz telepítve az ESP32 USB-UART kommunikációs drivere. Nyisd meg a Windowsban az Eszközkezelőt. Látni fogsz egy sárga felkiáltójeles cuccot. Az elnevezésben benne lesz a CP21xx vagy a CH34x szöveg. Ennek megfelelő drivert kell hozzá telepíteni! <br>
+Ha még nem flassheltél esp eszközt eddig, akkor nagy valószínűséggel nem lesz telepítve az ESP32 USB-UART kommunikációs drivere. Nyisd meg a Windowsban az Eszközkezelőt. Látni fogsz egy sárga felkiáltójeles cuccot. Az elnevezésben benne lesz a CP21xx vagy a CH34x szöveg. Ennek megfelelő drivert kell hozzá telepíteni! <br>
 [CP21xx driverek](https://www.silabs.com/software-and-tools/usb-to-uart-bridge-vcp-drivers?tab=downloads)<br>
 [CH34x driverek](https://www.wch-ic.com/downloads/ch341ser_zip.html)
 
