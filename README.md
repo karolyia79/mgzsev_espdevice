@@ -48,7 +48,7 @@ Az autó OBD2 portja adja a tápot, amit le kell transzformálni az ESP32 szám�
 
 ### B - Ha standalone akarod használni (nincs home assitant)
 1. Kösd össze az ESP32-t számítógéppel
-2. [KATT IDE](https://www.aliexpress.com/item/1005010535958276.html) és kövesd az utasításokat.
+2. [KATT IDE](https://github.com/karolyia79/mgzsev_espdevice/blob/main/index.html)) és kövesd az utasításokat.
 3. Csatlakozhatsz az esközhöz WiFi-n (megjenik egy AP, amit be kell konfigurálni) vagy Bluetooth-on is.
 4. WiFi-n a konfigurálás után kapott IP-re csatlakozva minden adatot látni fogsz.
 5. Bluetooth-ra csatlakozva kell valamilyen Bluetooth-terminál applikáció, amivel látható lak lesznek az adatok. Pl: Android: Serial Bluetooth Terminal (Fejlesztő: Kai Morich). Apple: Bluetooth Terminal (Lukas Pistrol)
