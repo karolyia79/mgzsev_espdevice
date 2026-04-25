@@ -287,8 +287,8 @@ interval:
           }
 
           if (should_wake) {
-            id(can_bus_mg).send_data(0x7DF, false, {0x02, 0x3E, 0x80, 0, 0, 0, 0, 0});
-            id(can_bus_mg).send_data(0x7DF, false, {0x02, 0x10, 0x03, 0, 0, 0, 0, 0});
+            id(can_bus_mg).send_data(0x7E3, false, {0x02, 0x3E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00});
+            id(can_bus_mg).send_data(0x781, false, {0x02, 0x3E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00});
           } else {
             // INFO szinten logolunk, hogy lássuk miért áll meg az olvasás (tehát a CAN-t miért hagytuk elaludni)
             ESP_LOGI("canbus", "A fedélzeti akkumlátor védelmében az ébresztést abbahagytam! (V: %.2fV)", id(mg_batt_voltage).state);
