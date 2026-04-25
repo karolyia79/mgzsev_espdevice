@@ -1,6 +1,6 @@
 # 🚗 MG ZS EV (2019-2021) CAN Bus Reader (ESPHome)
 
-Ez a projekt egy nyílt forráskódú megoldás az **MG ZS EV (2019-2021)** elektromos autó belső adatainak kiolvasására. Az eszköz az autó OBD2 portjára csatlakozik, és saját Wi-Fi hálózaton (Access Point) vagy Bluetooth-on keresztül teszi elérhetővé az adatokat.
+Ez a projekt egy nyílt forráskódú megoldás az **MG ZS EV (2019-2021)** elektromos autó belső adatainak kiolvasására. Az eszköz az autó OBD2 portjára csatlakozik, és saját Wi-Fi hálózaton (Access Point) vagy Bluetooth-on keresztül teszi elérhetővé az adatokat. FONTOS!!!! AZ ESZKÖZ FOLYAMATOSAN ÁRAMOT FOGYASZT. HA TÚL SOKÁG HAGYOD RAJTA, ÚGY HOGY NINCS TÖLTŐ AZ AUTÓN, AKKOR KÉPES A FEDÉLZETI (12V) AKKUDAT TÚLMERÍTENI. HA A FEDÉLZETI AKKUD EGYÉBKÉNT IS GYENGÉLKEDIK, AKKOR KÉPES ANNYIRA LEMERÍTENI, HOGY HÁZILAG MÁR MENTHETETLEN LESZ! JAVASOLT AZ ESZKÖZT KIZÁRÓLAG TÖLTÉS KÖZBEN HASZNÁLNI!
 
 ## ✨ Főbb funkciók
 - 🔋 **Akku adatok:** Valós SOC (%), SOH (egészségi állapot), feszültség, akku- és hűtőfolyadék hőmérséklet.
