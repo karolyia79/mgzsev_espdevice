@@ -273,26 +273,16 @@ binary_sensor:
     device_class: lock
 
 interval:
-  - interval: 2s
+  - interval: 5s
     then:
       - lambda: |-
-          // Alapértelmezetten menjen az ébresztés (true)
-          bool should_wake = true;
-
-          // HA az érték kisebb vagy egyenlő, mint 12.3V
-          if (!std::isnan(id(mg_batt_voltage).state)) {
-            if (id(mg_batt_voltage).state <= 12.3f) {
-              should_wake = false;
-            }
-          }
-
-          if (should_wake) {
+          if (id(mg_charger_connected).state || id(mg_bms_charging).state) {
             id(can_bus_mg).send_data(0x7E3, false, {0x02, 0x3E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00});
             id(can_bus_mg).send_data(0x781, false, {0x02, 0x3E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00});
-          } else {
-            // INFO szinten logolunk, hogy lássuk miért áll meg az olvasás (tehát a CAN-t miért hagytuk elaludni)
-            ESP_LOGI("canbus", "A fedélzeti akkumlátor védelmében az ébresztést abbahagytam! (V: %.2fV)", id(mg_batt_voltage).state);
           }
+      - logger.log:
+          format: "BT SOC: %.1f, Temp: %.1f"
+          args: [ 'id(mg_soc_raw).state', 'id(mg_hv_batt_temp).state' ]
 
   - interval: 10s
     then:
